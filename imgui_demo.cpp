@@ -1269,8 +1269,10 @@ static void ShowDemoWindowWidgets()
                     {
                         ImVector<char>* my_str = (ImVector<char>*)data->UserData;
                         IM_ASSERT(my_str->begin() == data->Buf);
+                        printf("Requested %d (%d)\n", data->BufTextLen, data->BufSize);
                         data->BufSize = IM_MIN(my_str->size(), data->BufSize);
                         data->BufTextLen = IM_MIN(my_str->size() - 1, data->BufTextLen);
+                        printf("Set it to %d (%d)\n", data->BufTextLen, data->BufSize);
                     }
                     return 0;
                 }
