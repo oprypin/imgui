@@ -1269,8 +1269,8 @@ static void ShowDemoWindowWidgets()
                     {
                         ImVector<char>* my_str = (ImVector<char>*)data->UserData;
                         IM_ASSERT(my_str->begin() == data->Buf);
-                        data->BufSize = IM_MIN(my_str->capacity(), data->BufSize);
-                        data->BufTextLen = IM_MIN(my_str->capacity() - 1, data->BufTextLen);
+                        data->BufSize = IM_MIN(my_str->size(), data->BufSize);
+                        data->BufTextLen = IM_MIN(my_str->size() - 1, data->BufTextLen);
                     }
                     return 0;
                 }
@@ -1280,11 +1280,7 @@ static void ShowDemoWindowWidgets()
                 static bool MyInputTextMultiline(const char* label, ImVector<char>* my_str, const ImVec2& size = ImVec2(0, 0), ImGuiInputTextFlags flags = 0)
                 {
                     IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
-                    if (my_str->empty()) {
-                        my_str->push_back(0);
-                        my_str->pop_back();
-                    }
-                    return ImGui::InputTextMultiline(label, my_str->begin(), (size_t)my_str->capacity(), size, flags | ImGuiInputTextFlags_CallbackResize, Funcs::MyResizeCallback, (void*)my_str);
+                    return ImGui::InputTextMultiline(label, my_str->begin(), (size_t)my_str->size(), size, flags | ImGuiInputTextFlags_CallbackResize, Funcs::MyResizeCallback, (void*)my_str);
                 }
             };
 
@@ -1292,6 +1288,10 @@ static void ShowDemoWindowWidgets()
             // Note that because we need to store a terminating zero character, our size/capacity are 1 more
             // than usually reported by a typical string class.
             static ImVector<char> my_str;
+            if (my_str.empty()) {
+                my_str.push_back(0);
+                my_str.resize(9);
+            }
             Funcs::MyInputTextMultiline("##MyStr", &my_str, ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 16));
             ImGui::Text("Data: %p\nSize: %d\nCapacity: %d", (void*)my_str.begin(), my_str.size(), my_str.capacity());
             ImGui::TreePop();
