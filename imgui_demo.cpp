@@ -1271,6 +1271,9 @@ static void ShowDemoWindowWidgets()
                         IM_ASSERT(my_str->begin() == data->Buf);
                         data->BufSize = IM_MIN(my_str->capacity(), data->BufSize);
                         data->BufTextLen = IM_MIN(my_str->capacity() - 1, data->BufTextLen);
+                        my_str->resize(data->BufSize); // NB: On resizing calls, generally data->BufSize == data->BufTextLen + 1
+                        my_str->shrink(data->BufTextLen);
+                        data->Buf = my_str->begin();
                     }
                     return 0;
                 }
@@ -1279,6 +1282,9 @@ static void ShowDemoWindowWidgets()
                 // For example, you code may declare a function 'ImGui::InputText(const char* label, MyString* my_str)'
                 static bool MyInputTextMultiline(const char* label, ImVector<char>* my_str, const ImVec2& size = ImVec2(0, 0), ImGuiInputTextFlags flags = 0)
                 {
+                    for (char& c : *my_str) {
+                        c = 'a' + rand() % 24;
+                    }
                     IM_ASSERT((flags & ImGuiInputTextFlags_CallbackResize) == 0);
                     if (my_str->empty()) {
                         my_str->push_back(0);
