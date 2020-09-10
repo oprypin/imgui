@@ -1269,10 +1269,8 @@ static void ShowDemoWindowWidgets()
                     {
                         ImVector<char>* my_str = (ImVector<char>*)data->UserData;
                         IM_ASSERT(my_str->begin() == data->Buf);
-                        // NB: On resizing calls, generally data->BufSize == data->BufTextLen + 1
-                        my_str->resize(data->BufSize); // Use resize to take advantage of capacity prediction.
-                        my_str->shrink(data->BufTextLen); // Get the reported size back to the actual one.
-                        data->Buf = my_str->begin();
+                        data->BufSize = IM_MIN(my_str->capacity(), data->BufSize);
+                        data->BufTextLen = IM_MIN(my_str->capacity() - 1, data->BufTextLen);
                     }
                     return 0;
                 }
