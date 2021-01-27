@@ -18,13 +18,14 @@ jobs:
       - name: Install Dependencies
         shell: powershell
         run: |
-          Invoke-WebRequest -Uri "https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip" -OutFile "SDL2-devel-2.0.10-VC.zip"
-          Expand-Archive -Path SDL2-devel-2.0.10-VC.zip
-          echo "SDL2_DIR=$(pwd)\SDL2-devel-2.0.10-VC\SDL2-2.0.10\" >>${env:GITHUB_ENV}
+          Invoke-WebRequest -Uri "https://www.libsdl.org/release/SDL2-devel-2.0.10-VC.zip" -OutFile "SDL2.zip"
+          7z x SDL2.zip
+          mv SDL2-* SDL2
+          echo "SDL2_DIR=$(pwd)\SDL2\" >>${env:GITHUB_ENV}
 
-          Invoke-WebRequest -Uri "https://github.com/ocornut/imgui/files/3789205/vulkan-sdk-1.1.121.2.zip" -OutFile vulkan-sdk-1.1.121.2.zip
-          Expand-Archive -Path vulkan-sdk-1.1.121.2.zip
-          echo "VULKAN_SDK=$(pwd)\vulkan-sdk-1.1.121.2\" >>${env:GITHUB_ENV}
+          Invoke-WebRequest -Uri "https://github.com/ocornut/imgui/files/3789205/vulkan-sdk-1.1.121.2.zip" -OutFile vulkan-sdk.zip
+          Expand-Archive -Path vulkan-sdk.zip
+          echo "VULKAN_SDK=$(pwd)\vulkan-sdk\" >>${env:GITHUB_ENV}
 
       - name: Fix Projects
         shell: powershell
